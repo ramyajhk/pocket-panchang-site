@@ -1,628 +1,281 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pocket Panchang - Your Complete Vedic Astrology Companion</title>
-    <style>
-        :root {
-            /* Light theme colors */
-            --primary-orange: #ffffff;
-            --secondary-orange: #ff9f5e;
-            --warm-gold: #ffd700;
-            --deep-red: #b8860b;
-            --cream: #fff8dc;
-            --warm-white: #faf5f0;
-            --text-dark: #2d1810;
-            --text-medium: #5d4037;
-            --border-light: rgba(255, 123, 45, 0.2);
-            
-            /* Dark theme colors */
-            --bg-dark: #1a1612;
-            --bg-dark-secondary: #2d251f;
-            --text-light: #f5e6d3;
-            --text-light-secondary: #d4c4b0;
-            --border-dark: rgba(255, 123, 45, 0.3);
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            line-height: 1.6;
-            transition: all 0.3s ease;
-        }
-        
-        /* Light theme (default) */
-        body.light {
-            background: linear-gradient(135deg, var(--primary-orange) 0%, var(--deep-red) 100%);
-            color: var(--text-dark);
-        }
-        
-        /* Dark theme */
-        body.dark {
-            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-dark-secondary) 100%);
-            color: var(--text-light);
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        /* Theme Toggle */
-        .theme-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            background: rgba(255, 123, 45, 0.2);
-            border: 2px solid rgba(255, 123, 45, 0.3);
-            border-radius: 50px;
-            padding: 10px 15px;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-            color: inherit;
-            font-size: 1.2em;
-            transition: all 0.3s ease;
-        }
-        
-        .theme-toggle:hover {
-            background: rgba(255, 123, 45, 0.3);
-            transform: scale(1.05);
-        }
-        
-        /* Header */
-        .header {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 20px 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid var(--border-light);
-        }
-        
-        .dark .header {
-            background: rgba(0, 0, 0, 0.3);
-            border-bottom: 1px solid var(--border-dark);
-        }
-        
-        .nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 1.8em;
-            font-weight: bold;
-            color: var(--warm-gold);
-            text-decoration: none;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 30px;
-            list-style: none;
-        }
-        
-        .nav-links a {
-            color: inherit;
-            text-decoration: none;
-            opacity: 0.9;
-            transition: all 0.3s;
-            font-weight: 500;
-        }
-        
-        .nav-links a:hover {
-            opacity: 1;
-            color: var(--warm-gold);
-        }
-        
-        /* Hero Section */
-        .hero {
-            text-align: center;
-            padding: 80px 0;
-            color: inherit;
-        }
-        
-        .hero h1 {
-            font-size: 3.5em;
-            margin-bottom: 20px;
-            background: linear-gradient(45deg, var(--warm-gold), var(--secondary-orange));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-        
-        .hero .subtitle {
-            font-size: 1.3em;
-            margin-bottom: 40px;
-            opacity: 0.9;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            color: inherit;
-        }
-        
-        /* App Screenshots Showcase */
-        .app-showcase {
-            margin: 60px 0;
-            position: relative;
-        }
-        
-        .screenshots-container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            perspective: 1000px;
-        }
-        
-        .screenshot-frame {
-            background: rgba(0,0,0,0.8);
-            border-radius: 25px;
-            padding: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            transition: transform 0.3s ease;
-            max-width: 280px;
-        }
-        
-        .screenshot-frame:hover {
-            transform: translateY(-10px) scale(1.02);
-        }
-        
-        .screenshot-frame img {
-            width: 100%;
-            height: auto;
-            border-radius: 15px;
-            display: block;
-        }
-        
-        .screenshot-label {
-            text-align: center;
-            margin-top: 15px;
-            font-size: 0.9em;
-            color: var(--warm-gold);
-            font-weight: 500;
-        }
-        
-        /* Download Buttons */
-        .download-section {
-            margin: 60px 0;
-        }
-        
-        .download-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-bottom: 30px;
-        }
-        
-        .download-btn {
-            display: inline-flex;
-            align-items: center;
-            padding: 18px 35px;
-            background: linear-gradient(135deg, var(--primary-orange), var(--secondary-orange));
-            color: white;
-            text-decoration: none;
-            border-radius: 15px;
-            border: 2px solid var(--warm-gold);
-            transition: all 0.3s ease;
-            font-size: 1.1em;
-            font-weight: 600;
-            box-shadow: 0 8px 25px rgba(255, 123, 45, 0.3);
-        }
-        
-        .download-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(255, 123, 45, 0.4);
-            background: linear-gradient(135deg, var(--secondary-orange), var(--warm-gold));
-        }
-        
-        .download-btn .icon {
-            margin-right: 12px;
-            font-size: 1.4em;
-        }
-        
-        /* Features Section */
-        .features {
-            background: var(--warm-white);
-            margin: 80px 0;
-            padding: 60px 0;
-            border-radius: 20px;
-            color: var(--text-dark);
-            border: 1px solid var(--border-light);
-        }
-        
-        .dark .features {
-            background: var(--bg-dark-secondary);
-            color: var(--text-light);
-            border: 1px solid var(--border-dark);
-        }
-        
-        .features h2 {
-            text-align: center;
-            font-size: 2.5em;
-            margin-bottom: 50px;
-            color: var(--primary-orange);
-        }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-        }
-        
-        .feature-card {
-            text-align: center;
-            padding: 30px;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(255, 123, 45, 0.1);
-            transition: all 0.3s ease;
-            border: 1px solid var(--border-light);
-        }
-        
-        .dark .feature-card {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--border-dark);
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(255, 123, 45, 0.2);
-        }
-        
-        .feature-card .emoji {
-            font-size: 3em;
-            margin-bottom: 20px;
-            display: block;
-        }
-        
-        .feature-card h3 {
-            font-size: 1.4em;
-            margin-bottom: 15px;
-            color: var(--primary-orange);
-        }
-        
-        .feature-card p {
-            color: inherit;
-            opacity: 0.8;
-            line-height: 1.6;
-        }
-        
-        /* Contact Section */
-        .contact {
-            background: rgba(255, 255, 255, 0.1);
-            margin: 60px 0;
-            padding: 50px 0;
-            border-radius: 20px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--border-light);
-        }
-        
-        .dark .contact {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--border-dark);
-        }
-        
-        .contact h2 {
-            font-size: 2.2em;
-            margin-bottom: 20px;
-            color: var(--warm-gold);
-        }
-        
-        .contact-email {
-            font-size: 1.3em;
-            color: var(--primary-orange);
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        
-        .contact-email:hover {
-            color: var(--warm-gold);
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-        
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 40px 0;
-            color: inherit;
-            opacity: 0.8;
-            border-top: 1px solid var(--border-light);
-        }
-        
-        .dark .footer {
-            border-top: 1px solid var(--border-dark);
-        }
-        
-        .footer-links {
-            margin: 20px 0;
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
-        }
-        
-        .footer-links a {
-            color: inherit;
-            text-decoration: none;
-            opacity: 0.7;
-            transition: all 0.3s;
-            font-size: 0.9em;
-        }
-        
-        .footer-links a:hover {
-            opacity: 1;
-            color: var(--warm-gold);
-        }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5em;
-            }
-            
-            .nav-links {
-                display: none;
-            }
-            
-            .download-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .screenshots-container {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .screenshot-frame {
-                max-width: 250px;
-            }
-            
-            .footer-links {
-                flex-direction: column;
-                gap: 15px;
-            }
-        }
-        
-        /* Coming Soon Badge */
-        .coming-soon {
-            background: var(--primary-orange);
-            color: white;
-            padding: 8px 20px;
-            border-radius: 25px;
-            font-size: 0.9em;
-            font-weight: 600;
-            display: inline-block;
-            margin-top: 20px;
-            box-shadow: 0 4px 15px rgba(210, 105, 30, 0.3);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pocket Panchang - Your Complete Vedic Astrology Companion</title>
+  <style>
+    :root {
+      /* Light theme colors */
+      --primary-orange: #ffffff;
+      --secondary-orange: #ff9f5e;
+      --warm-gold: #ffd700;
+      --deep-red: #b8860b;
+      --cream: #fff8dc;
+      --warm-white: #faf5f0;
+      --text-dark: #2d1810;
+      --text-medium: #5d4037;
+      --border-light: rgba(255, 123, 45, 0.2);
+
+      /* Dark theme colors */
+      --bg-dark: #1a1612;
+      --bg-dark-secondary: #2d251f;
+      --text-light: #f5e6d3;
+      --text-light-secondary: #d4c4b0;
+      --border-dark: rgba(255, 123, 45, 0.3);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      transition: all 0.3s ease;
+    }
+
+    /* Light theme (default) */
+    body.light {
+      background: linear-gradient(135deg, var(--warm-white) 0%, #fefefe 100%);
+      color: var(--text-dark);
+    }
+
+    /* Dark theme */
+    body.dark {
+      background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-dark-secondary) 100%);
+      color: var(--text-light);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Theme Toggle */
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      background: rgba(255, 123, 45, 0.2);
+      border: 2px solid rgba(255, 123, 45, 0.3);
+      border-radius: 50px;
+      padding: 10px 15px;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      color: inherit;
+      font-size: 1.2em;
+      transition: all 0.3s ease;
+    }
+
+    .theme-toggle:hover {
+      background: rgba(255, 123, 45, 0.3);
+      transform: scale(1.05);
+    }
+
+    /* Header */
+    .header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 20px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .dark .header {
+      background: rgba(0, 0, 0, 0.3);
+      border-bottom: 1px solid var(--border-dark);
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.8em;
+      font-weight: bold;
+      color: var(--warm-gold);
+      text-decoration: none;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: inherit;
+      text-decoration: none;
+      opacity: 0.9;
+      transition: all 0.3s;
+      font-weight: 500;
+    }
+
+    .nav-links a:hover {
+      opacity: 1;
+      color: var(--warm-gold);
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 80px 0;
+      color: inherit;
+    }
+
+    .hero h1 {
+      font-size: 3.5em;
+      margin-bottom: 20px;
+      background: linear-gradient(45deg, var(--warm-gold), var(--secondary-orange));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .hero .subtitle {
+      font-size: 1.3em;
+      margin-bottom: 40px;
+      opacity: 0.9;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      color: inherit;
+    }
+
+    /* Features Section */
+    .features {
+      background: var(--warm-white);
+      margin: 80px auto;
+      padding: 60px 20px;
+      border-radius: 20px;
+      color: var(--text-dark);
+      border: 1px solid var(--border-light);
+      max-width: 1000px;
+      text-align: center;
+    }
+
+    .dark .features {
+      background: var(--bg-dark-secondary);
+      color: var(--text-light);
+      border: 1px solid var(--border-dark);
+    }
+
+    .features h2 {
+      text-align: center;
+      font-size: 2.5em;
+      margin-bottom: 50px;
+      color: var(--secondary-orange);
+    }
+
+    .features-grid {
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 40px;
+      max-width: 900px;
+    }
+
+    /* Contact Section */
+    .contact {
+      background: var(--warm-white);
+      margin: 60px auto;
+      padding: 50px 20px;
+      border-radius: 20px;
+      text-align: center;
+      border: 1px solid var(--border-light);
+      max-width: 800px;
+    }
+
+    .dark .contact {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-dark);
+    }
+
+    .contact h2 {
+      font-size: 2.2em;
+      margin-bottom: 20px;
+      color: var(--warm-gold);
+    }
+
+    .contact-email {
+      font-size: 1.3em;
+      color: var(--secondary-orange);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .contact-email:hover {
+      color: var(--warm-gold);
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 40px 0;
+      color: inherit;
+      opacity: 0.8;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .dark .footer {
+      border-top: 1px solid var(--border-dark);
+    }
+  </style>
 </head>
 <body class="light">
-    <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
-    
-    <header class="header">
-        <nav class="nav container">
-            <a href="#" class="logo">🪔 Pocket Panchang</a>
-            <ul class="nav-links">
-                <li><a href="#features">Features</a></li>
-                <li><a href="#download">Download</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
+  <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
 
-    <section class="hero container">
-        <h1>Pocket Panchang</h1>
-        <p class="subtitle">
-            Your complete Vedic astrology companion. Get accurate Panchang, planetary hours, muhurthams, and auspicious timings based on authentic Vedic calculations. Perfect for daily spiritual practice and important life decisions.
-        </p>
-        
-        <div class="app-showcase">
-            <div class="screenshots-container">
-                <div class="screenshot-frame">
-                    <!-- You'll replace this with your actual screenshot -->
-                    <div style="width: 250px; height: 500px; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); border-radius: 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #333;">
-                        <h3>📅 Daily Panchang</h3>
-                        <p style="padding: 20px; text-align: center;">Complete Hindu calendar with Tithi, Nakshatra, Yoga, Karana for accurate spiritual timing</p>
-                    </div>
-                    <div class="screenshot-label">Daily Panchang</div>
-                </div>
-                
-                <div class="screenshot-frame">
-                    <div style="width: 250px; height: 500px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white;">
-                        <h3>🪐 Planetary Hours</h3>
-                        <p style="padding: 20px; text-align: center;">Precise Hora calculations for favorable timing of activities</p>
-                    </div>
-                    <div class="screenshot-label">Planetary Hours</div>
-                </div>
-                
-                <div class="screenshot-frame">
-                    <div style="width: 250px; height: 500px; background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); border-radius: 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #333;">
-                        <h3>⭐ Muhurthams</h3>
-                        <p style="padding: 20px; text-align: center;">Auspicious timings for weddings, travel, and important events</p>
-                    </div>
-                    <div class="screenshot-label">Auspicious Timings</div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="download-section" id="download">
-            <div class="download-buttons">
-                <a href="#" class="download-btn">
-                    <span class="icon">📱</span>
-                    <span>Download for iOS</span>
-                </a>
-                <a href="#" class="download-btn">
-                    <span class="icon">🤖</span>
-                    <span>Download for Android</span>
-                </a>
-            </div>
-            <div class="coming-soon">Coming Soon to App Stores</div>
-        </div>
-    </section>
+  <header class="header">
+    <nav class="nav container">
+      <a href="#" class="logo">🪔 Pocket Panchang</a>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#download">Download</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
 
-    <section class="features container" id="features">
-        <h2>Comprehensive Vedic Features</h2>
-        <div class="features-grid">
-            <div class="feature-card">
-                <span class="emoji">📅</span>
-                <h3>Daily Panchang</h3>
-                <p>Complete daily Hindu calendar with Tithi, Nakshatra, Yoga, Karana, and Vara for accurate spiritual timing and religious observances.</p>
-            </div>
-            
-            <div class="feature-card">
-                <span class="emoji">🪐</span>
-                <h3>Planetary Hours (Hora)</h3>
-                <p>Precise planetary hour calculations to help you choose the most favorable times for different activities throughout the day.</p>
-            </div>
-            
-            <div class="feature-card">
-                <span class="emoji">⏰</span>
-                <h3>Choghadiya</h3>
-                <p>Auspicious and inauspicious time periods for travel, business, and important decisions with detailed explanations.</p>
-            </div>
-            
-            <div class="feature-card">
-                <span class="emoji">🌙</span>
-                <h3>Lunar Calendar</h3>
-                <p>Moon phases, rise/set times, and lunar strength indicators for meditation, fasting, and spiritual practices.</p>
-            </div>
-            
-            <div class="feature-card">
-                <span class="emoji">🎯</span>
-                <h3>Muhurthams</h3>
-                <p>Find the most auspicious timings for weddings, business launches, travel, and other important life events.</p>
-            </div>
-            
-            <div class="feature-card">
-                <span class="emoji">🪔</span>
-                <h3>Festival Calendar</h3>
-                <p>Never miss important Hindu festivals, Ekadashi fasting days, and spiritual observances with accurate regional dates.</p>
-            </div>
-        </div>
-    </section>
+  <!-- keep your existing hero, screenshots, download, features, contact, footer sections unchanged -->
 
-    <section class="contact container" id="contact">
-        <h2>Get in Touch</h2>
-        <p>For support, feedback, or collaboration inquiries:</p>
-        <a href="mailto:contact@pocketpanchang.com" class="contact-email">contact@pocketpanchang.com</a>
-    </section>
+  <script>
+    function toggleTheme() {
+      const body = document.body;
+      const themeToggle = document.querySelector('.theme-toggle');
+      if (body.classList.contains('light')) {
+        body.classList.remove('light');
+        body.classList.add('dark');
+        themeToggle.innerHTML = '☀️';
+        localStorage.setItem('theme', 'dark');
+      } else {
+        body.classList.remove('dark');
+        body.classList.add('light');
+        themeToggle.innerHTML = '🌙';
+        localStorage.setItem('theme', 'light');
+      }
+    }
 
-    <footer class="footer container">
-        <div class="footer-links">
-            <a href="app-ads.txt">app-ads.txt</a>
-            <a href="privacy-policy.html">Privacy Policy</a>
-            <a href="disclaimer.html">Disclaimer</a>
-            <a href="terms-conditions.html">Terms & Conditions</a>
-        </div>
-        <p>&copy; 2025 Pocket Panchang. Made with devotion for the spiritual community.</p>
-        <p>Authentic Vedic calculations for modern practitioners</p>
-    </footer>
-
-    <script>
-        let currentSlide = 0;
-        const screenshotsPerSlide = 3;
-        
-        function moveCarousel(direction) {
-            const carousel = document.getElementById('carousel');
-            if (!carousel) return;
-            
-            const slideWidth = 320; // 280px + 20px gap + 20px padding
-            const totalScreenshots = carousel.children.length;
-            const maxSlides = Math.ceil(totalScreenshots / screenshotsPerSlide) - 1;
-            
-            currentSlide += direction;
-            
-            // Loop back to beginning/end
-            if (currentSlide < 0) {
-                currentSlide = maxSlides;
-            } else if (currentSlide > maxSlides) {
-                currentSlide = 0;
-            }
-            
-            const translateX = currentSlide * slideWidth * screenshotsPerSlide;
-            carousel.style.transform = `translateX(-${translateX}px)`;
-            
-            updateDots();
-        }
-        
-        function goToSlide(slideIndex) {
-            const carousel = document.getElementById('carousel');
-            if (!carousel) return;
-            
-            const slideWidth = 320;
-            
-            currentSlide = slideIndex;
-            const translateX = currentSlide * slideWidth * screenshotsPerSlide;
-            carousel.style.transform = `translateX(-${translateX}px)`;
-            
-            updateDots();
-        }
-        
-        function updateDots() {
-            const dots = document.querySelectorAll('.carousel-dot');
-            dots.forEach((dot, index) => {
-                if (dot && dot.classList) {
-                    dot.classList.toggle('active', index === currentSlide);
-                }
-            });
-        }
-        
-        // Auto-play carousel
-        function autoPlay() {
-            moveCarousel(1);
-        }
-        
-        function toggleTheme() {
-            const body = document.body;
-            const themeToggle = document.querySelector('.theme-toggle');
-            
-            if (body.classList.contains('light')) {
-                body.classList.remove('light');
-                body.classList.add('dark');
-                themeToggle.innerHTML = '☀️';
-                localStorage.setItem('theme', 'dark');
-            } else {
-                body.classList.remove('dark');
-                body.classList.add('light');
-                themeToggle.innerHTML = '🌙';
-                localStorage.setItem('theme', 'light');
-            }
-        }
-        
-        // Load saved theme and initialize carousel
-        document.addEventListener('DOMContentLoaded', function() {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            const body = document.body;
-            const themeToggle = document.querySelector('.theme-toggle');
-            
-            body.classList.remove('light', 'dark');
-            body.classList.add(savedTheme);
-            themeToggle.innerHTML = savedTheme === 'dark' ? '☀️' : '🌙';
-            
-            // Initialize carousel
-            updateDots();
-            
-            // Start auto-play every 5 seconds
-            setInterval(autoPlay, 5000);
-        });
-    </script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      const body = document.body;
+      const themeToggle = document.querySelector('.theme-toggle');
+      body.classList.remove('light', 'dark');
+      body.classList.add(savedTheme);
+      themeToggle.innerHTML = savedTheme === 'dark' ? '☀️' : '🌙';
+    });
+  </script>
 </body>
 </html>
